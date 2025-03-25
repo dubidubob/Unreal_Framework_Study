@@ -72,3 +72,6 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#Remove ParagonMorigesh Folder(2.5Gb)
+Content/ParagonMorigesh/
