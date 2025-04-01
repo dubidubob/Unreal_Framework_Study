@@ -58,6 +58,13 @@ AABCharacterPlayer::AABCharacterPlayer()
 		ShoulderLookAction = InputActionShoulderLookRef.Object;
 	}
 
+	//생성자 코드에 가서 입력 액션에 대한 로딩을 해주도록 한다.
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Script/EnhancedInput.InputAction'/Game/ArenaBattle/Input/Actions/IA_Attack.IA_Attack'"));
+	if (nullptr != InputActionAttackRef.Object)
+	{
+		AttackAction = InputActionAttackRef.Object;
+	}
+
 	CurrentCharacterControlType = ECharacterControlType::Quater;
 }
 
@@ -80,6 +87,7 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(ShoulderMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ShoulderMove);
 	EnhancedInputComponent->BindAction(ShoulderLookAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ShoulderLook);
 	EnhancedInputComponent->BindAction(QuaterMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::QuaterMove);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack); //바인딩 진행
 }
 
 void AABCharacterPlayer::ChangeCharacterControl()
@@ -177,4 +185,9 @@ void AABCharacterPlayer::QuaterMove(const FInputActionValue& Value)
 	GetController()->SetControlRotation(FRotationMatrix::MakeFromX(MoveDirection).Rotator());
 
 	AddMovementInput(MoveDirection, MovementVectorSize);
+}
+
+void AABCharacterPlayer::Attack()
+{
+	ProcessComboCommand();
 }
